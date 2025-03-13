@@ -294,7 +294,7 @@ public class aaTeleop extends OpMode {
                             intakeTimer.reset();
                         }
                         endEffector.setSubPickupPosition();
-                        if (intakeTimer.milliseconds() >= 150) {
+                        if (intakeTimer.milliseconds() >= 175) {
                             endEffector.closeClaw();
                         }
                         if (intakeTimer.milliseconds() >= 200) {
@@ -435,6 +435,7 @@ public class aaTeleop extends OpMode {
         telemetry.addData("Pivot Pos", slides.pivotPos);
         telemetry.addData("Pivot Target", slides.pivotTarget);
         telemetry.addData("specScoring", specScoring);
+        telemetry.addData("Yippee", "FastDeploy works");
         telemetry.update();
     }
 

@@ -26,7 +26,8 @@ public class Deposit {
 
 
     private static final double[] autoSlideCoefficients = {0.06,0,0.0016, 0};
-    private static final double[] teleopSlideCoefficients = {0.04,0,0.0016, 0};
+    private static final double[] teleopSlideCoefficients = {0.08,0,0.0024, 0};
+                                                // might be {0.04,0,0.0016, 0} i forgot
 
     //    private static final double[] teleopSlideCoefficients = {0.0125,0,0.0002, 0.0025};
 
