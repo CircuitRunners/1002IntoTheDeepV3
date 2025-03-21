@@ -138,7 +138,7 @@ public class aaTeleop extends OpMode {
             intakeState = -1;
             depositState = -1;
             slides.pidfActive = false;
-            slides.setPivotTarget(90);
+            slides.setPivotTarget(180);
             slides.setSlideTarget(0);
         }
 

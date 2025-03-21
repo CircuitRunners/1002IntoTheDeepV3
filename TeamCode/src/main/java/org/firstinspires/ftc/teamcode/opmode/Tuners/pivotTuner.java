@@ -78,7 +78,7 @@ public class pivotTuner extends OpMode {
     @Override
     public void loop() {
         liftPos = Math.round((float) rightLift.getCurrentPosition() / 42) * -1;
-        pivotPos = (int) (Math.round(pivotEncoder.getVoltage() / 3.2 * 360) + 24) % 360;
+        pivotPos = (int) (Math.round(pivotEncoder.getVoltage() / 3.2 * 360) + 50) % 360;
 
         slidePIDF.setPIDF(liftP, liftI, liftD, liftF * Math.sin(Math.toRadians(pivotPos)));
         pivotPIDF.setPIDF(pivotP, pivotI, pivotD, pivotF * Math.cos(Math.toRadians(pivotPos) * ((double) liftPos / 1100)));
