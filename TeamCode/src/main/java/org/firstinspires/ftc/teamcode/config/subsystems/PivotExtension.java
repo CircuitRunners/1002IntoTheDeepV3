@@ -17,7 +17,7 @@ public class PivotExtension {
     private PIDController liftController, pivotController;
     public static int liftTarget=0, pivotTarget=0;
     public static double teleopLiftKP = 0.05, teleopLiftKI = 0.0, teleopLiftKD = 0.0003, teleopLiftKF = 0.15;
-    public static double teleopPivotKP = 0.01, teleopPivotKI = 0, teleopPivotKD = 0.0007, teleopPivotKF =0.5;
+    public static double teleopPivotKP = 0.00009, teleopPivotKI = 0, teleopPivotKD = 0.006, teleopPivotKF =0.5;
     public static double autoliftKP = 0.02, autoLiftKI = 0.0, autoLiftKD = 0.00035, autoLiftKF = 0.15;
     public static double autoPivotKP = 0.01, autoPivotKI = 0, autoPivotKD = 0.0007, autoPivotKf=0.5;
     public static int liftMax = 1000;
