@@ -18,13 +18,13 @@ import java.util.List;
 
 @Config
 @TeleOp
-public class DepositTuner extends OpMode {
+public class pivotTuner extends OpMode {
     public static double liftP = 0.0125, liftI = 0.0, liftD = 0.0002, liftF = 0.0025;
     public static double pivotP = 0.03, pivotI = 0, pivotD = 0.001, pivotF = 0.002;
 
     public static int liftSetPoint = 0;
     public static int pivotSetPoint = 0;
-    public static double maxPowerConstant = 0;
+    public static double maxPowerConstant = 1.03;
     private static final PIDFController slidePIDF = new PIDFController(liftP,liftI,liftD, liftF);
     private static final PIDFController pivotPIDF = new PIDFController(pivotP,pivotI,pivotD, pivotF);
     public ElapsedTime timer = new ElapsedTime();
@@ -35,6 +35,7 @@ public class DepositTuner extends OpMode {
 
     @Override
     public void init() {
+
         List<LynxModule> allHubs = hardwareMap.getAll(LynxModule.class);
 
         for (LynxModule hub : allHubs) {
@@ -48,10 +49,6 @@ public class DepositTuner extends OpMode {
 
         pivot = hardwareMap.get(DcMotorEx.class, "pivot");
         pivotEncoder = hardwareMap.get(AnalogInput.class, "pivot_enc");
-
-//        //kesavan's nonsense below, delete if it breaks
-//        pivotPos = (int) (Math.round(pivotEncoder.getVoltage() / 3.2 * 360) + 34) % 360;
-//        pivotSetPoint = pivotPos;
 
         leftLift.setDirection(DcMotorSimple.Direction.FORWARD);
         rightLift.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -80,11 +77,8 @@ public class DepositTuner extends OpMode {
 
     @Override
     public void loop() {
-        timer.reset();
-
         liftPos = Math.round((float) rightLift.getCurrentPosition() / 42) * -1;
-        pivotPos = (int) (Math.round(pivotEncoder.getVoltage() / 3.2 * 360) + 34) % 360;
-        pivotSetPoint = pivotPos;
+        pivotPos = (int) (Math.round(pivotEncoder.getVoltage() / 3.2 * 360) +  3) % 360;
 
         slidePIDF.setPIDF(liftP, liftI, liftD, liftF * Math.sin(Math.toRadians(pivotPos)));
         pivotPIDF.setPIDF(pivotP, pivotI, pivotD, pivotF * Math.cos(Math.toRadians(pivotPos) * ((double) liftPos / 1100)));
@@ -96,15 +90,15 @@ public class DepositTuner extends OpMode {
         double liftPower = Range.clip(slidePIDF.calculate(liftPos, liftSetPoint), -liftMaxPower, liftMaxPower);
 
         double pivotMaxPower = maxPowerConstant;
-        double pivotPower = 0;
+        double pivotPower = Range.clip(pivotPIDF.calculate(pivotPos, pivotSetPoint), -pivotMaxPower, pivotMaxPower);
 
         // liftPower = (liftPower / Math.abs(liftPower)) * Math.sqrt(Math.abs(liftPower));
-        rightLift.setPower(liftPower);
-        leftLift.setPower(liftPower);
+        //rightLift.setPower(liftPower);
+        //leftLift.setPower(liftPower);
 
-       // pivotPower = (pivotPower / Math.abs(pivotPower)) * Math.sqrt(Math.abs(pivotPower));
+        // pivotPower = (pivotPower / Math.abs(pivotPower)) * Math.sqrt(Math.abs(pivotPower));
 
-        pivot.setPower(pivotPower);
+        //pivot.setPower(pivotPower);
 
         telemetry.addData("lift position", liftPos);
         telemetry.addData("lift set point", liftSetPoint);
