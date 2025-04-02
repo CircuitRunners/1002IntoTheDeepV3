@@ -217,7 +217,7 @@ public class EndEffector {
      * Sets the end effector to the sub pickup position.
      */
     public void setSubPickupPosition() {
-        setPositions(0.63, 0.67, wristPosition, clawPosition);
+        setPositions(0.63, 0.75, wristPosition, clawPosition);
     }
 
     /**
