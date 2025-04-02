@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.Auto;
 
+import com.qualcomm.robotcore.util.Range;
+
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.core.Point;
@@ -18,6 +20,21 @@ public class limelight extends OpenCvPipeline {
     private double blockAngle = 0;
     private double blockY = 0;
     private List<Rect> detectedBlocks = new ArrayList<>();
+
+    public static double wrap(double value, double min, double max) {
+        double range = max - min;
+        double wrappedValue = (value - min) % range;
+        if (wrappedValue < 0) {
+            wrappedValue += range;
+        }
+        return wrappedValue + min;
+    }
+
+
+
+//    public void incrementPivotPosition(double step) {
+//        setPivotPosition(Range.clip(pivotPosition + step, 0.0, 1.0));
+//    }
 
     public limelight(String color) {
         switch (color.toLowerCase()) {

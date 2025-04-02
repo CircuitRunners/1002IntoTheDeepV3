@@ -28,6 +28,8 @@ public class Deposit {
     private static final double[] autoSlideCoefficients = {0.06,0,0.0016, 0};
     private static final double[] teleopSlideCoefficients = {0.04,0,0.0016, 0};
 
+    // private static final double[] teleopSlideCoefficients = {0.08,0,0.0024, 0}; - hannah bucket changes
+
     //    private static final double[] teleopSlideCoefficients = {0.0125,0,0.0002, 0.0025};
 
 
@@ -153,7 +155,7 @@ public class Deposit {
 
     public int pivotPos() {
         // int pos = (int) (Math.round(pivotEncoder.getVoltage() / 3.2 * 360)) % 360 - 168;
-        int pos = (int) (Math.round(pivotEncoder.getVoltage() / 3.2 * 360)) % 360 - 171;
+        int pos = (int) (Math.round(pivotEncoder.getVoltage() / 3.2 * 360) + 75) % 360;
 
         if (pos >= 360) {
             pos -= 360;

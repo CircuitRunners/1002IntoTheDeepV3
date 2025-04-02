@@ -176,7 +176,7 @@ public class EndEffector {
      * Sets the end effector to an idle position.
      */
     public void setIdlePosition() {
-        setPositions(0.54, 0.5, 0.5, clawPosition);
+        setPositions(0.54, 0.5, 0.45, clawPosition);
     }
 
     public void setAutoIdle() {
@@ -245,14 +245,14 @@ public class EndEffector {
      * Opens the claw.
      */
     public void openClaw() {
-        setClawPosition(0.85);
+        setClawPosition(0.7);
     }
 
     /**
      * Closes the claw.
      */
     public void closeClaw() {
-        setClawPosition(0.13);
+        setClawPosition(0.03);
     }
 
     /**

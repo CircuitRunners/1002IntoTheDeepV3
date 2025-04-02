@@ -48,7 +48,7 @@ public class aaTeleop extends OpMode {
     private ElapsedTime intakeTimer = new ElapsedTime();
     private ElapsedTime depositTimer = new ElapsedTime();
 
-    private final static double PIVOT_DOWN = 8;
+    private final static double PIVOT_DOWN = 20;
     private static boolean distance = true;
 
     @Override
@@ -294,7 +294,7 @@ public class aaTeleop extends OpMode {
                             intakeTimer.reset();
                         }
                         endEffector.setSubPickupPosition();
-                        if (intakeTimer.milliseconds() >= 150) {
+                        if (intakeTimer.milliseconds() >= 175) {
                             endEffector.closeClaw();
                         }
                         if (intakeTimer.milliseconds() >= 200) {
@@ -428,13 +428,15 @@ public class aaTeleop extends OpMode {
         );
         telemetry.addData("Position", data);
         telemetry.addData("Status", pinpoint.getDeviceStatus());
-        telemetry.addData("Ende Effector Pivot Pos", endEffector.getPivotPosition());
+        telemetry.addData("End Effector Pivot Pos", endEffector.getPivotPosition());
         telemetry.addData("Pinpoint Frequency", pinpoint.getFrequency());
         telemetry.addData("Lift Pos", slides.liftPos);
         telemetry.addData("Lift Target", slides.slidePIDF.getSetPoint());
         telemetry.addData("Pivot Pos", slides.pivotPos);
         telemetry.addData("Pivot Target", slides.pivotTarget);
         telemetry.addData("specScoring", specScoring);
+        telemetry.addData("Color Sensor pin0", endEffector.pin0());
+        telemetry.addData("Color Sensor pin1", endEffector.pin1());
         telemetry.update();
     }
 
