@@ -48,7 +48,7 @@ public class aaTeleop extends OpMode {
     private ElapsedTime intakeTimer = new ElapsedTime();
     private ElapsedTime depositTimer = new ElapsedTime();
 
-    private final static double PIVOT_DOWN = 20;
+    private final static double PIVOT_DOWN = 10;
     private static boolean distance = true;
 
     @Override
@@ -344,7 +344,7 @@ public class aaTeleop extends OpMode {
             case 5:
                 slides.setPivotTarget(95);
                 //slides.setSlideTarget(515);
-                slides.setSlideTarget(1205);
+                slides.setSlideTarget(1215);
                 intakeTimer.reset();
                 phase = 0;
                 break;
@@ -402,7 +402,7 @@ public class aaTeleop extends OpMode {
                 break;
 
             case 3:
-                slides.setSlideTarget(500);
+                slides.setSlideTarget(480);
                 depositTimer.reset();
                 break;
             case 4:
