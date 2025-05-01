@@ -8,11 +8,12 @@ public class Poses {
     public static final double farX = 55;
     public static final double closeX = 30;
     public static final double wallY = 9;
-    public static final double intakeX = 8;
+    public static final double intakeX = 8+1;//idk about the +1
     public static final double subX = 42;
     public static final double subY = 77;
 
     public static final Pose startPose = new Pose(7.3285, 65.83, 0);
+
     public static final Pose preloadPose = new Pose(subX + 1, 65.83, 0);
 
     // Combined Push Pathchain

@@ -48,7 +48,7 @@ public class aaTeleop extends OpMode {
     private ElapsedTime intakeTimer = new ElapsedTime();
     private ElapsedTime depositTimer = new ElapsedTime();
 
-    private final static double PIVOT_DOWN = 10;
+    private final static double PIVOT_DOWN = 6;
     private static boolean distance = true;
 
     @Override
