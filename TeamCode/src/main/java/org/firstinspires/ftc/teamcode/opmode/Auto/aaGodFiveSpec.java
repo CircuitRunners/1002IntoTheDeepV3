@@ -273,11 +273,13 @@ public class aaGodFiveSpec extends OpMode {
     @Override
     public void init_loop() {
         endEffector.setAutoIdle();
+        endEffector.closeClaw();
     }
 
     @Override
     public void start() {
         pathTimer.resetTimer();
+        endEffector.closeClaw();
         setPathState(0);
     }
 

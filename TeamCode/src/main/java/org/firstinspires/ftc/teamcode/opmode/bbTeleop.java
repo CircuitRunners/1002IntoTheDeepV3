@@ -22,8 +22,8 @@ import org.firstinspires.ftc.teamcode.config.subsystems.Deposit;
 import org.firstinspires.ftc.teamcode.config.subsystems.EndEffector;
 import org.firstinspires.ftc.robotcontroller.internal.GoBildaPinpointDriver;
 
-@TeleOp(name = "teleopFunnyFunny")
-public class aaTeleop extends OpMode {
+@TeleOp(name = "bbTeleop")
+public class bbTeleop extends OpMode {
 
     // Hardware references
     private MecanumDrive drive;
@@ -48,7 +48,7 @@ public class aaTeleop extends OpMode {
     private ElapsedTime intakeTimer = new ElapsedTime();
     private ElapsedTime depositTimer = new ElapsedTime();
 
-    private final static double PIVOT_DOWN = 6;
+    private final static double PIVOT_DOWN = 10;
     private static boolean distance = true;
 
     @Override
@@ -480,3 +480,4 @@ public class aaTeleop extends OpMode {
         return pos;
     }
 }
+
