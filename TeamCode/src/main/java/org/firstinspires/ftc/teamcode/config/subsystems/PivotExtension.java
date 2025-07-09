@@ -21,7 +21,7 @@ public class PivotExtension {
     public static double autoliftKP = 0.02, autoLiftKI = 0.0, autoLiftKD = 0.00035, autoLiftKF = 0.15;
     public static double autoPivotKP = 0.01, autoPivotKI = 0, autoPivotKD = 0.0007, autoPivotKf=0.5;
     public static int liftMax = 1000;
-    public static int offset = 37;
+    public static int offset = -100;
     public static int deadband = 15;
 
     public PivotExtension(HardwareMap hardwareMap, Telemetry telemetry, boolean isAuto) {
