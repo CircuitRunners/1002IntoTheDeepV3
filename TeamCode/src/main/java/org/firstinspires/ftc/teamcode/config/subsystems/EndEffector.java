@@ -210,14 +210,14 @@ public class EndEffector {
      */
     public void setPreSubPickupPosition() {
         // was 0.67 & 0.67
-        setPositions(0.58, 0.86, wristPosition, clawPosition);
+        setPositions(0.49, 0.84, wristPosition, clawPosition);
     }
 
     /**
      * Sets the end effector to the sub pickup position.
      */
     public void setSubPickupPosition() {
-        setPositions(0.63, 0.86, wristPosition, clawPosition);
+        setPositions(0.57, 0.86, wristPosition, clawPosition);
     }
 
     /**
@@ -252,7 +252,7 @@ public class EndEffector {
      * Closes the claw.
      */
     public void closeClaw() {
-        setClawPosition(0.03);
+        setClawPosition(0.32);
     }
 
     /**

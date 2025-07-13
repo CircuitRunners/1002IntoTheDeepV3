@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.config.subsystems.Deposit;
 import org.firstinspires.ftc.teamcode.config.subsystems.EndEffector;
 import org.firstinspires.ftc.robotcontroller.internal.GoBildaPinpointDriver;
 
-@TeleOp(name = "teleopFunnyFunny")
+@TeleOp
 public class aaTeleop extends OpMode {
 
     // Hardware references
@@ -101,6 +101,7 @@ public class aaTeleop extends OpMode {
         // Handle Spec / Samp Deposit
         if (player1.wasJustPressed(GamepadKeys.Button.TOUCHPAD_FINGER_1) && player1.wasJustPressed(GamepadKeys.Button.TOUCHPAD_FINGER_2)) {
             specScoring = !specScoring;
+            gamepad1.rumbleBlips(1);
         }
 
         // Handle LED override logic
@@ -437,6 +438,7 @@ public class aaTeleop extends OpMode {
         telemetry.addData("specScoring", specScoring);
         telemetry.addData("Color Sensor pin0", endEffector.pin0());
         telemetry.addData("Color Sensor pin1", endEffector.pin1());
+
         telemetry.update();
     }
 
