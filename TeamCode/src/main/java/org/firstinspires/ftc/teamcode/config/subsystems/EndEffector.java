@@ -242,6 +242,13 @@ public class EndEffector {
     }
 
     /**
+     *  Sets the end effector to a scoring position for the low chamber.
+     */
+    public void setLowChamberScore() {
+        setPositions(0.3, 0.8, 1, 0.13);
+    }
+
+    /**
      * Opens the claw.
      */
     public void openClaw() {

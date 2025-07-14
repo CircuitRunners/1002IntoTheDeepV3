@@ -49,7 +49,7 @@ public class aaTeleop extends OpMode {
     private ElapsedTime depositTimer = new ElapsedTime();
 
     private final static double PIVOT_DOWN = 6;
-    private static boolean distance = true;
+    private static boolean distance = false;
 
     @Override
     public void init() {
@@ -178,9 +178,9 @@ public class aaTeleop extends OpMode {
         if (psJustPressed) {
             endEffector.override = !endEffector.override;
         }
-        if (shareJustPressed) {
-            distance = !distance;
-        }
+//        if (shareJustPressed) {
+//            distance = !distance;
+//        }
 
         // 5) Spec Intake (left bumper + / left trigger -)
         if (leftBumperJustPressed) {
@@ -404,6 +404,17 @@ public class aaTeleop extends OpMode {
 
             case 3:
                 slides.setSlideTarget(480);
+                //switch to low chamber
+                // maybe another control check for arm down movement to score if needed, possibly meaning adding another EndEffector position aah pain
+                if (shareJustPressed && slides.slideTarget == 480) {
+                    endEffector.setLowChamberScore();
+                    slides.setSlideTarget(0);
+                }
+                //switch to high chamber
+                else if (shareJustPressed && slides.slideTarget == 0) {
+                    endEffector.setSpecScore();
+                    slides.setSlideTarget(480);
+                }
                 depositTimer.reset();
                 break;
             case 4:
