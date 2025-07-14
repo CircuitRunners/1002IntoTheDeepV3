@@ -38,18 +38,19 @@ public class CRISpecLeft extends OpMode {
     private static final int SLIDE_SCORE = 450;
     private static final int SLIDE_SAFE = 350;
 
-    private PathChain preload, push1, push2, push3, score;
+    private PathChain preload, push1, push2, push3, prescore, score;
 
 
     private final double startingX = 7.3285;
     private final double startingY = 65.83;
-    private final Pose preScorePose = new Pose(startingX + 40.5, startingY - 17, Math.toRadians(0));
-    private final Pose scorePose = new Pose(startingX +58,startingY -11,Math.toRadians(270));
+    private final Pose preScorePose = new Pose(startingX + 55, startingY - 15, Math.toRadians(0));
+    // 51, -16.5
+    private final Pose scorePose = new Pose(startingX +59,startingY -9,Math.toRadians(90));
     private final Pose intakePose = new Pose(startingX +.610, startingY -18.375, Math.toRadians(0));
     private final Pose preloadControlPose = new Pose(startingX +12,startingY -20, Math.toRadians(0));
-    private final Pose scoreControlPose = new Pose(startingX +60, startingY -18, Math.toRadians(0));
+    private final Pose scoreControlPose = new Pose(69, 47, Math.toRadians(0));
 
-    private final Pose push1ControlPose = new Pose(56, 29, Math.toRadians(0));
+    private final Pose push1ControlPose = new Pose(56, 25, Math.toRadians(0));
     private final Pose push2ControlPose = new Pose(63, 29, Math.toRadians(0));
     private final Pose push3ControlPose = new Pose(70, 29, Math.toRadians(0));
 
@@ -59,9 +60,8 @@ public class CRISpecLeft extends OpMode {
         preload = follower.pathBuilder()
                 .addPath(new BezierCurve(pointFromPose(Poses.startPose), pointFromPose(preloadControlPose), pointFromPose(preScorePose)))
                 .setConstantHeadingInterpolation(Math.toRadians(0))
-                .addPath(new BezierCurve(pointFromPose(preScorePose), pointFromPose(scoreControlPose), pointFromPose(scorePose)))
-                .setTangentHeadingInterpolation()
-                .setPathEndHeadingConstraint(Math.toRadians(270))
+                .addPath(new BezierLine(pointFromPose(preScorePose), pointFromPose(scorePose)))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
                 .build();
 
         push1 = follower.pathBuilder()
@@ -79,12 +79,16 @@ public class CRISpecLeft extends OpMode {
                 .setTangentHeadingInterpolation()
                 .build();
 
-        score = follower.pathBuilder()
+        prescore = follower.pathBuilder()
                 .addPath(new BezierLine(pointFromPose(intakePose), pointFromPose(preScorePose)))
                 .setConstantHeadingInterpolation(Math.toRadians(0))
-                .addPath(new BezierCurve(pointFromPose(preScorePose), pointFromPose(scoreControlPose), pointFromPose(scorePose)))
-                .setTangentHeadingInterpolation()
                 .build();
+
+        score = follower.pathBuilder()
+                .addPath(new BezierLine(pointFromPose(preScorePose), pointFromPose(scorePose)))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
+                .build();
+
     }
 
     //gee i sure hope this works first try
@@ -97,50 +101,55 @@ public class CRISpecLeft extends OpMode {
                 }
                 break;
             case 1:
-                preScore();
-                break;
-            case 2:
-                if (!follower.isBusy()) {
-                    if (specCounter == 1) {
-                        follower.followPath(push1, true);
-                        setPathState();
-                    }
-                    else if (specCounter == 2) {
-                        follower.followPath(push2, true);
-                        setPathState();
-                    }
-                    else if (specCounter >= 3) {
-                        follower.followPath(push3, true);
-                        setPathState();
-                    }
-                }
-                break;
-            case 3:
-                intakePrep();
-                break;
-            case 4:
-                intake();
-                break;
-            case 5:
                 if (!follower.isBusy()) {
                     follower.followPath(score, true);
                     setPathState();
                 }
+            case 2:
+                preScore();
                 break;
-            case 6:
-                score();
-                break;
-            case 7:
-                if (!follower.isBusy()) {
-                    follower.followPath(push3, true);
-                    if (specCounter == 5) {
-                        setPathState(-1);
-                    }
-                    else {
-                        setPathState(2);
-                    }
-                }
-                break;
+//            case 3:
+//                if (!follower.isBusy()) {
+//                    if (specCounter == 1) {
+//                        follower.followPath(push1, true);
+//                        setPathState();
+//                    }
+//                    else if (specCounter == 2) {
+//                        follower.followPath(push2, true);
+//                        setPathState();
+//                    }
+//                    else if (specCounter >= 3) {
+//                        follower.followPath(push3, true);
+//                        setPathState();
+//                    }
+//                }
+//                break;
+//            case 4:
+//                intakePrep();
+//                break;
+//            case 5:
+//                intake();
+//                break;
+//            case 6:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(score, true);
+//                    setPathState();
+//                }
+//                break;
+//            case 7:
+//                score();
+//                break;
+//            case 8:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(push3, true);
+//                    if (specCounter == 5) {
+//                        setPathState(-1);
+//                    }
+//                    else {
+//                        setPathState(2);
+//                    }
+//                }
+//                break;
 
             default:
                 if (follower.getPose().getY() < 65 && follower.getPose().getX() < 50 && specCounter == 5) {
@@ -170,7 +179,7 @@ public class CRISpecLeft extends OpMode {
             deposit.setSlideTarget(SLIDE_SCORE);
         }
 
-        if (follower.getVelocityMagnitude() < SCORE_VEL_THRESHOLD && follower.getPose().getX() > 35) {
+        if (follower.getVelocityMagnitude() < SCORE_VEL_THRESHOLD && follower.getPose().getX() > 55) {
             endEffector.openClaw();
             deposit.setSlideTarget(SLIDE_SAFE);
             specCounter++;
@@ -250,7 +259,7 @@ public class CRISpecLeft extends OpMode {
             follower.setMaxPower(1);
             power = 1;
         }
-        follower.setMaxPower(0.3);
+        follower.setMaxPower(0.5);
 
         deposit.update();
 
