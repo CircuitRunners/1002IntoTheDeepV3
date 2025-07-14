@@ -44,6 +44,7 @@ public class aaTeleop extends OpMode {
     private int intakeState = -1;
     private int depositState = -1;
     private boolean specScoring = true;
+    private boolean lowChamber = false;
     private int phase = 0;  // used in multi-phase intake logic
     private ElapsedTime intakeTimer = new ElapsedTime();
     private ElapsedTime depositTimer = new ElapsedTime();
@@ -104,6 +105,10 @@ public class aaTeleop extends OpMode {
             gamepad1.rumbleBlips(1);
         }
 
+        if (player1.wasJustPressed(GamepadKeys.Button.RIGHT_STICK_BUTTON)) {
+            lowChamber = !lowChamber;
+        }
+
         // Handle LED override logic
         if (endEffector.override) {
             endEffector.setLight(0);
@@ -159,7 +164,6 @@ public class aaTeleop extends OpMode {
             slides.setPivotTarget(121);
             slides.setSlideTarget(50);
         }
-
 
 
         // 4) Rising edge detection for bumpers/triggers
@@ -378,6 +382,7 @@ public class aaTeleop extends OpMode {
         // 9) Deposit State Machine
         switch (depositState) {
             case 0:
+                lowChamber = false;
                 slides.setPivotTarget(121);
                 slides.setSlideTarget(0);
                 endEffector.setWallIntakePositionAlt();
@@ -398,28 +403,30 @@ public class aaTeleop extends OpMode {
                 }                break;
 
             case 2:
-                endEffector.setSpecScore();
+                slides.setSlideTarget(0);
+                if (lowChamber) {
+                    endEffector.setLowChamberScore();
+                }
+                else {
+                    endEffector.setSpecScore();
+                }
                 depositTimer.reset();
                 break;
-
             case 3:
-                slides.setSlideTarget(480);
-                //switch to low chamber
-                // maybe another control check for arm down movement to score if needed, possibly meaning adding another EndEffector position aah pain
-                if (shareJustPressed && slides.slideTarget == 480) {
-                    endEffector.setLowChamberScore();
-                    slides.setSlideTarget(0);
+                if (lowChamber) {
+                    depositState++;
                 }
-                //switch to high chamber
-                else if (shareJustPressed && slides.slideTarget == 0) {
-                    endEffector.setSpecScore();
+                else {
                     slides.setSlideTarget(480);
                 }
                 depositTimer.reset();
                 break;
             case 4:
                 endEffector.openClaw();
-                if (endEffector.clawPosition > 0.5 && depositTimer.milliseconds() > 200) {
+                if (lowChamber) {
+                    break;
+                }
+                else if (endEffector.clawPosition > 0.5 && depositTimer.milliseconds() > 200) {
                     slides.setSlideTarget(350);
                 }
                 break;

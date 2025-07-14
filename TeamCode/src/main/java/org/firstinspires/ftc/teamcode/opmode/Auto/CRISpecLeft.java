@@ -40,6 +40,7 @@ public class CRISpecLeft extends OpMode {
 
     private PathChain preload, push1, push2, push3, score;
 
+
     private final double startingX = 7.3285;
     private final double startingY = 65.83;
     private final Pose preScorePose = new Pose(startingX + 40.5, startingY - 17, Math.toRadians(0));
@@ -60,6 +61,7 @@ public class CRISpecLeft extends OpMode {
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .addPath(new BezierCurve(pointFromPose(preScorePose), pointFromPose(scoreControlPose), pointFromPose(scorePose)))
                 .setTangentHeadingInterpolation()
+                .setPathEndHeadingConstraint(Math.toRadians(270))
                 .build();
 
         push1 = follower.pathBuilder()
@@ -248,6 +250,7 @@ public class CRISpecLeft extends OpMode {
             follower.setMaxPower(1);
             power = 1;
         }
+        follower.setMaxPower(0.3);
 
         deposit.update();
 

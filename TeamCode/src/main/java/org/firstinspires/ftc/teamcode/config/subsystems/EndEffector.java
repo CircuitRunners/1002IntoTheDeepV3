@@ -238,14 +238,14 @@ public class EndEffector {
      * Sets the end effector to a special scoring position.
      */
     public void setSpecScore() {
-        setPositions(0.37, 0.74, 1, 0.13);
+        setPositions(0.37, 0.74, 1, 0.3);
     }
 
     /**
      *  Sets the end effector to a scoring position for the low chamber.
      */
     public void setLowChamberScore() {
-        setPositions(0.3, 0.8, 1, 0.13);
+        setPositions(0.3, 0.8, 1, 0.37); //0.13 old claw close, but .32 works as well
     }
 
     /**
