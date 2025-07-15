@@ -44,16 +44,16 @@ public class AltCRILeft extends OpMode {
 
     private final double startingX = 7.3285;
     private final double startingY = 65.83;
-    private final Pose preScorePose = new Pose(startingX + 55, startingY - 15, Math.toRadians(0));
-    // 51, -16.5
-    private final Pose scorePose = new Pose(startingX +59,startingY -9,Math.toRadians(90));
-    private final Pose intakePose = new Pose(startingX +.610, startingY -18.3, Math.toRadians(0));
+    private final Pose preScorePose = new Pose(startingX + 40, startingY - 17, Math.toRadians(0));
+    private final Pose scorePose = new Pose(startingX +55,startingY -9,Math.toRadians(90));
+    private final Pose intakePose = new Pose(startingX +.610, startingY -16, Math.toRadians(0));
     private final Pose preloadControlPose = new Pose(startingX +12,startingY -20, Math.toRadians(0));
-    private final Pose preIntakePose = new Pose(startingX + 5, startingY - 18.3, Math.toRadians(0));
-    private final Pose push1ControlPose = new Pose(56, 25, Math.toRadians(0));
+    private final Pose preIntakePose = new Pose(startingX + 11, startingY - 16, Math.toRadians(0));
+    private final Pose push1ControlPose = new Pose(50, 28, Math.toRadians(0));
     private final Pose push2ControlPose = new Pose(63, 29, Math.toRadians(0));
     private final Pose push3ControlPose = new Pose(70, 29, Math.toRadians(0));
-    private final Pose dropPose = new Pose(startingX + 5, startingY - 12, Math.toRadians(0));
+    private final Pose dropPose = new Pose(startingX + 9, startingY - 18, Math.toRadians(0));
+    private final Pose turnPose = new Pose(startingX + 55, startingY - 17, Math.toRadians(0));
     private final Pose parkControlPose = new Pose(67.5, 46, Math.toRadians(0)); //in case i want make the park a curve
 
 
@@ -62,35 +62,35 @@ public class AltCRILeft extends OpMode {
         preload = follower.pathBuilder()
                 .addPath(new BezierCurve(pointFromPose(Poses.startPose), pointFromPose(preloadControlPose), pointFromPose(preScorePose)))
                 .setConstantHeadingInterpolation(Math.toRadians(0))
-                .addPath(new BezierLine(pointFromPose(preScorePose), pointFromPose(preScorePose)))
+                .addPath(new BezierLine(pointFromPose(preScorePose), pointFromPose(turnPose)))
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
-                .addPath(new BezierLine(pointFromPose(preScorePose), pointFromPose(scorePose)))
+                .addPath(new BezierLine(pointFromPose(turnPose), pointFromPose(scorePose)))
                 .setConstantHeadingInterpolation(Math.toRadians(90))
                 .build();
 
         push1 = follower.pathBuilder()
                 .addPath(new BezierCurve(pointFromPose(scorePose), pointFromPose(push1ControlPose), pointFromPose(dropPose)))
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(-30))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(-45))
                 .addPath(new BezierLine(pointFromPose(dropPose), pointFromPose(preIntakePose)))
-                .setLinearHeadingInterpolation(Math.toRadians(-30), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0))
                 .addPath(new BezierLine(pointFromPose(preIntakePose), pointFromPose(intakePose)))
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
         push2 = follower.pathBuilder()
                 .addPath(new BezierCurve(pointFromPose(scorePose), pointFromPose(push2ControlPose), pointFromPose(dropPose)))
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(-30))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(-45))
                 .addPath(new BezierLine(pointFromPose(dropPose), pointFromPose(preIntakePose)))
-                .setLinearHeadingInterpolation(Math.toRadians(-30), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0))
                 .addPath(new BezierLine(pointFromPose(preIntakePose), pointFromPose(intakePose)))
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
         push3 = follower.pathBuilder()
                 .addPath(new BezierCurve(pointFromPose(scorePose), pointFromPose(push3ControlPose), pointFromPose(dropPose)))
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(-30))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(-45))
                 .addPath(new BezierLine(pointFromPose(dropPose), pointFromPose(preIntakePose)))
-                .setLinearHeadingInterpolation(Math.toRadians(-30), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0))
                 .addPath(new BezierLine(pointFromPose(preIntakePose), pointFromPose(intakePose)))
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
@@ -261,20 +261,26 @@ public class AltCRILeft extends OpMode {
         if (specCounter == 5) {
             follower.setMaxPower(1);
             power = 1;
-        } else if (follower.getPose().getX() < 40 && follower.getPose().getY() < 60 && follower.getPose().getY() > 28 && follower.getVelocity().getXComponent() < 0 && specCounter != 1) {
-            follower.setMaxPower(0.35);
-            power = 0.35;
-        } else if (follower.getPose().getX() < 24 && follower.getPose().getY() < 48 && follower.getPose().getY() > 24 && follower.getPose().getY() > 10 && follower.getVelocity().getXComponent() < 0) {
-            follower.setMaxPower(0.35);
-            power = 0.35;
-        } else if (specCounter == 1) {
+        }
+        else if (specCounter == 0) {
+            follower.setMaxPower(0.8);
+            power = 0.8;
+        }
+//        else if (follower.getPose().getX() < 40 && follower.getPose().getY() < 60 && follower.getPose().getY() > 28 && follower.getVelocity().getXComponent() < 0 && specCounter != 1) {
+//            follower.setMaxPower(0.35);
+//            power = 0.35;
+//        } else if (follower.getPose().getX() < 24 && follower.getPose().getY() < 48 && follower.getPose().getY() > 24 && follower.getPose().getY() > 10 && follower.getVelocity().getXComponent() < 0) {
+//            follower.setMaxPower(0.35);
+//            power = 0.35;
+//            }
+         else if (specCounter == 1) {
             follower.setMaxPower(1);
             power = 1;
         }else {
             follower.setMaxPower(1);
             power = 1;
         }
-        follower.setMaxPower(0.5);
+//        follower.setMaxPower(0.5);
 
         deposit.update();
 

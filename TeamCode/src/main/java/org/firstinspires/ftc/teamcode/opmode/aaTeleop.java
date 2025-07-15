@@ -453,6 +453,7 @@ public class aaTeleop extends OpMode {
         telemetry.addData("Lift Target", slides.slidePIDF.getSetPoint());
         telemetry.addData("Pivot Pos", slides.pivotPos);
         telemetry.addData("Pivot Target", slides.pivotTarget);
+        telemetry.addData("Claw Position", endEffector.clawPosition);
         telemetry.addData("specScoring", specScoring);
         telemetry.addData("Color Sensor pin0", endEffector.pin0());
         telemetry.addData("Color Sensor pin1", endEffector.pin1());
