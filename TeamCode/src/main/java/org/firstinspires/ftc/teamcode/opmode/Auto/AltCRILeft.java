@@ -22,8 +22,8 @@ import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.pathgen.Point;
 import com.pedropathing.util.Timer;
 
-@Autonomous(name = "CRI Left", preselectTeleOp = "aaTeleop")
-public class CRISpecLeft extends OpMode {
+@Autonomous(name = "CRI Sample Pusher", preselectTeleOp = "aaTeleop")
+public class AltCRILeft extends OpMode {
     private Follower follower;
     private Timer pathTimer;
     private EndEffector endEffector;
@@ -47,13 +47,13 @@ public class CRISpecLeft extends OpMode {
     private final Pose preScorePose = new Pose(startingX + 55, startingY - 15, Math.toRadians(0));
     // 51, -16.5
     private final Pose scorePose = new Pose(startingX +59,startingY -9,Math.toRadians(90));
-    private final Pose intakePose = new Pose(startingX +.610, startingY -12.375, Math.toRadians(0));
+    private final Pose intakePose = new Pose(startingX +.610, startingY -18.3, Math.toRadians(0));
     private final Pose preloadControlPose = new Pose(startingX +12,startingY -20, Math.toRadians(0));
-    private final Pose preIntakePose = new Pose(startingX + 5, startingY - 12.375, Math.toRadians(0));
+    private final Pose preIntakePose = new Pose(startingX + 5, startingY - 18.3, Math.toRadians(0));
     private final Pose push1ControlPose = new Pose(56, 25, Math.toRadians(0));
     private final Pose push2ControlPose = new Pose(63, 29, Math.toRadians(0));
     private final Pose push3ControlPose = new Pose(70, 29, Math.toRadians(0));
-    private final Pose dropPose = new Pose(startingX + 5, startingY - 18.375, Math.toRadians(0));
+    private final Pose dropPose = new Pose(startingX + 5, startingY - 12, Math.toRadians(0));
     private final Pose parkControlPose = new Pose(67.5, 46, Math.toRadians(0)); //in case i want make the park a curve
 
 
@@ -70,27 +70,27 @@ public class CRISpecLeft extends OpMode {
 
         push1 = follower.pathBuilder()
                 .addPath(new BezierCurve(pointFromPose(scorePose), pointFromPose(push1ControlPose), pointFromPose(dropPose)))
-                .setTangentHeadingInterpolation()
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(-30))
                 .addPath(new BezierLine(pointFromPose(dropPose), pointFromPose(preIntakePose)))
-                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(-30), Math.toRadians(0))
                 .addPath(new BezierLine(pointFromPose(preIntakePose), pointFromPose(intakePose)))
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
         push2 = follower.pathBuilder()
                 .addPath(new BezierCurve(pointFromPose(scorePose), pointFromPose(push2ControlPose), pointFromPose(dropPose)))
-                .setTangentHeadingInterpolation()
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(-30))
                 .addPath(new BezierLine(pointFromPose(dropPose), pointFromPose(preIntakePose)))
-                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(-30), Math.toRadians(0))
                 .addPath(new BezierLine(pointFromPose(preIntakePose), pointFromPose(intakePose)))
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
         push3 = follower.pathBuilder()
                 .addPath(new BezierCurve(pointFromPose(scorePose), pointFromPose(push3ControlPose), pointFromPose(dropPose)))
-                .setTangentHeadingInterpolation()
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(-30))
                 .addPath(new BezierLine(pointFromPose(dropPose), pointFromPose(preIntakePose)))
-                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(-30), Math.toRadians(0))
                 .addPath(new BezierLine(pointFromPose(preIntakePose), pointFromPose(intakePose)))
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
