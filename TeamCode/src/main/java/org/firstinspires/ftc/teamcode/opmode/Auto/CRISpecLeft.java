@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.Auto;
 
+import com.pedropathing.localization.GoBildaPinpointDriver;
 import com.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -38,7 +39,7 @@ public class CRISpecLeft extends OpMode {
     private static final int SLIDE_SCORE = 450;
     private static final int SLIDE_SAFE = 350;
 
-    private PathChain preload, push1, push2, push3, prescore, score;
+    private PathChain preload, push1, push2, push3, score, park;
 
 
     private final double startingX = 7.3285;
@@ -46,13 +47,14 @@ public class CRISpecLeft extends OpMode {
     private final Pose preScorePose = new Pose(startingX + 55, startingY - 15, Math.toRadians(0));
     // 51, -16.5
     private final Pose scorePose = new Pose(startingX +59,startingY -9,Math.toRadians(90));
-    private final Pose intakePose = new Pose(startingX +.610, startingY -18.375, Math.toRadians(0));
+    private final Pose intakePose = new Pose(startingX +.610, startingY -12.375, Math.toRadians(0));
     private final Pose preloadControlPose = new Pose(startingX +12,startingY -20, Math.toRadians(0));
-    private final Pose scoreControlPose = new Pose(69, 47, Math.toRadians(0));
-
+    private final Pose preIntakePose = new Pose(startingX + 5, startingY - 12.375, Math.toRadians(0));
     private final Pose push1ControlPose = new Pose(56, 25, Math.toRadians(0));
     private final Pose push2ControlPose = new Pose(63, 29, Math.toRadians(0));
     private final Pose push3ControlPose = new Pose(70, 29, Math.toRadians(0));
+    private final Pose dropPose = new Pose(startingX + 5, startingY - 18.375, Math.toRadians(0));
+    private final Pose parkControlPose = new Pose(67.5, 46, Math.toRadians(0)); //in case i want make the park a curve
 
 
 
@@ -60,33 +62,48 @@ public class CRISpecLeft extends OpMode {
         preload = follower.pathBuilder()
                 .addPath(new BezierCurve(pointFromPose(Poses.startPose), pointFromPose(preloadControlPose), pointFromPose(preScorePose)))
                 .setConstantHeadingInterpolation(Math.toRadians(0))
-                .addPath(new BezierLine(pointFromPose(preScorePose), pointFromPose(scorePose)))
+                .addPath(new BezierLine(pointFromPose(preScorePose), pointFromPose(preScorePose)))
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
+                .addPath(new BezierLine(pointFromPose(preScorePose), pointFromPose(scorePose)))
+                .setConstantHeadingInterpolation(Math.toRadians(90))
                 .build();
 
         push1 = follower.pathBuilder()
-                .addPath(new BezierCurve(pointFromPose(scorePose), pointFromPose(push1ControlPose), pointFromPose(intakePose)))
+                .addPath(new BezierCurve(pointFromPose(scorePose), pointFromPose(push1ControlPose), pointFromPose(dropPose)))
                 .setTangentHeadingInterpolation()
+                .addPath(new BezierLine(pointFromPose(dropPose), pointFromPose(preIntakePose)))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .addPath(new BezierLine(pointFromPose(preIntakePose), pointFromPose(intakePose)))
                 .build();
 
         push2 = follower.pathBuilder()
                 .addPath(new BezierCurve(pointFromPose(scorePose), pointFromPose(push2ControlPose), pointFromPose(intakePose)))
                 .setTangentHeadingInterpolation()
+                .addPath(new BezierLine(pointFromPose(dropPose), pointFromPose(preIntakePose)))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .addPath(new BezierLine(pointFromPose(preIntakePose), pointFromPose(intakePose)))
                 .build();
 
         push3 = follower.pathBuilder()
                 .addPath(new BezierCurve(pointFromPose(scorePose), pointFromPose(push3ControlPose), pointFromPose(intakePose)))
                 .setTangentHeadingInterpolation()
-                .build();
-
-        prescore = follower.pathBuilder()
-                .addPath(new BezierLine(pointFromPose(intakePose), pointFromPose(preScorePose)))
+                .addPath(new BezierLine(pointFromPose(dropPose), pointFromPose(preIntakePose)))
                 .setConstantHeadingInterpolation(Math.toRadians(0))
+                .addPath(new BezierLine(pointFromPose(preIntakePose), pointFromPose(intakePose)))
                 .build();
 
         score = follower.pathBuilder()
-                .addPath(new BezierLine(pointFromPose(preScorePose), pointFromPose(scorePose)))
+                .addPath(new BezierLine(pointFromPose(intakePose), pointFromPose(preScorePose)))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .addPath(new BezierLine(pointFromPose(preScorePose), pointFromPose(preScorePose)))
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
+                .addPath(new BezierLine(pointFromPose(preScorePose), pointFromPose(scorePose)))
+                .setConstantHeadingInterpolation(Math.toRadians(90))
+                .build();
+
+        park = follower.pathBuilder()
+                .addPath(new BezierLine(pointFromPose(scorePose), pointFromPose(dropPose)))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(0))
                 .build();
 
     }
@@ -101,55 +118,50 @@ public class CRISpecLeft extends OpMode {
                 }
                 break;
             case 1:
+                preScore();
+                break;
+            case 2:
+                if (!follower.isBusy()) {
+                    if (specCounter == 1) {
+                        follower.followPath(push1, true);
+                        setPathState();
+                    }
+                    else if (specCounter == 2) {
+                        follower.followPath(push2, true);
+                        setPathState();
+                    }
+                    else if (specCounter >= 3) {
+                        follower.followPath(push3, true);
+                        setPathState();
+                    }
+                }
+                break;
+            case 3:
+                intakePrep();
+                break;
+            case 4:
+                intake();
+                break;
+            case 5:
                 if (!follower.isBusy()) {
                     follower.followPath(score, true);
                     setPathState();
                 }
-            case 2:
-                preScore();
                 break;
-//            case 3:
-//                if (!follower.isBusy()) {
-//                    if (specCounter == 1) {
-//                        follower.followPath(push1, true);
-//                        setPathState();
-//                    }
-//                    else if (specCounter == 2) {
-//                        follower.followPath(push2, true);
-//                        setPathState();
-//                    }
-//                    else if (specCounter >= 3) {
-//                        follower.followPath(push3, true);
-//                        setPathState();
-//                    }
-//                }
-//                break;
-//            case 4:
-//                intakePrep();
-//                break;
-//            case 5:
-//                intake();
-//                break;
-//            case 6:
-//                if (!follower.isBusy()) {
-//                    follower.followPath(score, true);
-//                    setPathState();
-//                }
-//                break;
-//            case 7:
-//                score();
-//                break;
-//            case 8:
-//                if (!follower.isBusy()) {
-//                    follower.followPath(push3, true);
-//                    if (specCounter == 5) {
-//                        setPathState(-1);
-//                    }
-//                    else {
-//                        setPathState(2);
-//                    }
-//                }
-//                break;
+            case 6:
+                score();
+                break;
+            case 7:
+                if (!follower.isBusy()) {
+                    if (specCounter == 5) {
+                        follower.followPath(park, true);
+                        setPathState(-1);
+                    }
+                    else {
+                        setPathState(2);
+                    }
+                }
+                break;
 
             default:
                 if (follower.getPose().getY() < 65 && follower.getPose().getX() < 50 && specCounter == 5) {

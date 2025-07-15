@@ -259,7 +259,7 @@ public class EndEffector {
      * Closes the claw.
      */
     public void closeClaw() {
-        setClawPosition(0.32);
+        setClawPosition(0.13);
     }
 
     /**

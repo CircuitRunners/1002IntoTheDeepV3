@@ -100,7 +100,7 @@ public class aaTeleop extends OpMode {
 
 
         // Handle Spec / Samp Deposit
-        if (player1.wasJustPressed(GamepadKeys.Button.TOUCHPAD_FINGER_1) && player1.wasJustPressed(GamepadKeys.Button.TOUCHPAD_FINGER_2)) {
+        if (player1.wasJustPressed(GamepadKeys.Button.LEFT_STICK_BUTTON)) {
             specScoring = !specScoring;
             gamepad1.rumbleBlips(1);
         }
@@ -182,9 +182,9 @@ public class aaTeleop extends OpMode {
         if (psJustPressed) {
             endEffector.override = !endEffector.override;
         }
-//        if (shareJustPressed) {
-//            distance = !distance;
-//        }
+        if (shareJustPressed) {
+            distance = !distance;
+        }
 
         // 5) Spec Intake (left bumper + / left trigger -)
         if (leftBumperJustPressed) {
