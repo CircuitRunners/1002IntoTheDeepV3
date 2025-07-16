@@ -22,7 +22,7 @@ import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.pathgen.Point;
 import com.pedropathing.util.Timer;
 
-@Autonomous(name = "CRI Sample Pusher", preselectTeleOp = "aaTeleop")
+@Autonomous(name = "CRI Bezier Push", preselectTeleOp = "aaTeleop")
 public class AltCRILeft extends OpMode {
     private Follower follower;
     private Timer pathTimer;
@@ -39,21 +39,23 @@ public class AltCRILeft extends OpMode {
     private static final int SLIDE_SCORE = 450;
     private static final int SLIDE_SAFE = 350;
 
-    private PathChain preload, push1, push2, push3, score, park;
+    private PathChain preload, push1, push2, push3, score, park, nudge3;
 
 
     private final double startingX = 7.3285;
     private final double startingY = 65.83;
     private final Pose preScorePose = new Pose(startingX + 40, startingY - 17, Math.toRadians(0));
-    private final Pose scorePose = new Pose(startingX +55,startingY -9,Math.toRadians(90));
-    private final Pose intakePose = new Pose(startingX +.610, startingY -16, Math.toRadians(0));
+    private final Pose scorePose = new Pose(startingX +55,startingY -8, Math.toRadians(90));
+    private final Pose intakePose = new Pose(startingX +.610, startingY - 18, Math.toRadians(0));
     private final Pose preloadControlPose = new Pose(startingX +12,startingY -20, Math.toRadians(0));
-    private final Pose preIntakePose = new Pose(startingX + 11, startingY - 16, Math.toRadians(0));
-    private final Pose push1ControlPose = new Pose(50, 28, Math.toRadians(0));
-    private final Pose push2ControlPose = new Pose(63, 29, Math.toRadians(0));
+    private final Pose preIntakePose = new Pose(startingX + 11, startingY - 18, Math.toRadians(0));
+    private final Pose push1ControlPose = new Pose(50, 37, Math.toRadians(0));
+    private final Pose push2ControlPose = new Pose(70, 29, Math.toRadians(0));
     private final Pose push3ControlPose = new Pose(70, 29, Math.toRadians(0));
     private final Pose dropPose = new Pose(startingX + 9, startingY - 18, Math.toRadians(0));
     private final Pose turnPose = new Pose(startingX + 55, startingY - 17, Math.toRadians(0));
+    private final Pose parkPose = new Pose(startingX + 10, startingY - 17, Math.toRadians(0));
+    private final Pose pre3Pose = new Pose(startingX + 58, startingY - 18, Math.toRadians(100));
     private final Pose parkControlPose = new Pose(67.5, 46, Math.toRadians(0)); //in case i want make the park a curve
 
 
@@ -70,9 +72,9 @@ public class AltCRILeft extends OpMode {
 
         push1 = follower.pathBuilder()
                 .addPath(new BezierCurve(pointFromPose(scorePose), pointFromPose(push1ControlPose), pointFromPose(dropPose)))
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(-45))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(-55))
                 .addPath(new BezierLine(pointFromPose(dropPose), pointFromPose(preIntakePose)))
-                .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(-55), Math.toRadians(0))
                 .addPath(new BezierLine(pointFromPose(preIntakePose), pointFromPose(intakePose)))
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
@@ -87,8 +89,10 @@ public class AltCRILeft extends OpMode {
                 .build();
 
         push3 = follower.pathBuilder()
-                .addPath(new BezierCurve(pointFromPose(scorePose), pointFromPose(push3ControlPose), pointFromPose(dropPose)))
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(-45))
+                .addPath(new BezierLine(pointFromPose(scorePose), pointFromPose(pre3Pose)))
+                .setConstantHeadingInterpolation(Math.toRadians(90))
+                .addPath(new BezierLine(pointFromPose(pre3Pose), pointFromPose(dropPose)))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(-20))
                 .addPath(new BezierLine(pointFromPose(dropPose), pointFromPose(preIntakePose)))
                 .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0))
                 .addPath(new BezierLine(pointFromPose(preIntakePose), pointFromPose(intakePose)))
@@ -98,15 +102,22 @@ public class AltCRILeft extends OpMode {
         score = follower.pathBuilder()
                 .addPath(new BezierLine(pointFromPose(intakePose), pointFromPose(preScorePose)))
                 .setConstantHeadingInterpolation(Math.toRadians(0))
-                .addPath(new BezierLine(pointFromPose(preScorePose), pointFromPose(preScorePose)))
+                .addPath(new BezierLine(pointFromPose(preScorePose), pointFromPose(turnPose)))
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
-                .addPath(new BezierLine(pointFromPose(preScorePose), pointFromPose(scorePose)))
+                .addPath(new BezierLine(pointFromPose(turnPose), pointFromPose(scorePose)))
                 .setConstantHeadingInterpolation(Math.toRadians(90))
                 .build();
 
         park = follower.pathBuilder()
-                .addPath(new BezierLine(pointFromPose(scorePose), pointFromPose(dropPose)))
+                .addPath(new BezierLine(pointFromPose(scorePose), pointFromPose(turnPose)))
                 .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(0))
+                .addPath(new BezierLine(pointFromPose(turnPose), pointFromPose(parkPose)))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .build();
+
+        nudge3 = follower.pathBuilder()
+                .addPath(new BezierLine(pointFromPose(scorePose), pointFromPose(pre3Pose)))
+                .setConstantHeadingInterpolation(Math.toRadians(100))
                 .build();
 
     }
@@ -134,6 +145,7 @@ public class AltCRILeft extends OpMode {
                         setPathState();
                     }
                     else if (specCounter >= 3) {
+                        follower.setMaxPower(0.5);
                         follower.followPath(push3, true);
                         setPathState();
                     }
@@ -160,11 +172,19 @@ public class AltCRILeft extends OpMode {
                         follower.followPath(park, true);
                         setPathState(-1);
                     }
+                    else if (specCounter == 2) {
+                        setPathState();
+                    }
                     else {
                         setPathState(2);
                     }
                 }
                 break;
+            case 8:
+                if (!follower.isBusy()) {
+                    follower.followPath(nudge3, true);
+                    setPathState(2);
+                }
 
             default:
                 if (follower.getPose().getY() < 65 && follower.getPose().getX() < 50 && specCounter == 5) {
@@ -274,11 +294,11 @@ public class AltCRILeft extends OpMode {
 //            power = 0.35;
 //            }
          else if (specCounter == 1) {
-            follower.setMaxPower(1);
-            power = 1;
+            follower.setMaxPower(0.8);
+            power = 0.8;
         }else {
-            follower.setMaxPower(1);
-            power = 1;
+            follower.setMaxPower(0.8);
+            power = 0.8;
         }
 //        follower.setMaxPower(0.5);
 

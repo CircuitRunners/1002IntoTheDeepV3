@@ -231,7 +231,7 @@ public class EndEffector {
      * Sets the end effector to an alternate wall intake position.
      */
     public void setWallIntakePositionAlt() {
-        setPositions(0.85, 0.66, 0, clawPosition);
+        setPositions(0.88, 0.63, 0, clawPosition);
     }
 
     /**
