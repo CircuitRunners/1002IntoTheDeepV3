@@ -231,21 +231,21 @@ public class EndEffector {
      * Sets the end effector to an alternate wall intake position.
      */
     public void setWallIntakePositionAlt() {
-        setPositions(0.88, 0.63, 0, clawPosition);
+        setPositions(0.88, 0.67, 0, clawPosition);
     }
 
     /**
      * Sets the end effector to a special scoring position.
      */
     public void setSpecScore() {
-        setPositions(0.37, 0.74, 1, 0.3);
+        setPositions(0.41, 0.74, 1, 0.3);
     }
 
     /**
      *  Sets the end effector to a scoring position for the low chamber.
      */
     public void setLowChamberScore() {
-        setPositions(0.3, 0.8, 1, 0.44);
+        setPositions(0.34, 0.8, 1, 0.44);
     }
 
     /**

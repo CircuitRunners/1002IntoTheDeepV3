@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmode.Auto;
 
-import com.pedropathing.localization.GoBildaPinpointDriver;
 import com.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -22,8 +21,8 @@ import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.pathgen.Point;
 import com.pedropathing.util.Timer;
 
-@Autonomous(name = "CRI Safe Push", preselectTeleOp = "aaTeleop")
-public class SafeCRILeft extends OpMode {
+@Autonomous(name = "CRI Left", preselectTeleOp = "aaTeleop")
+public class CRILeft extends OpMode {
     private Follower follower;
     private Timer pathTimer;
     private EndEffector endEffector;
@@ -39,25 +38,30 @@ public class SafeCRILeft extends OpMode {
     private static final int SLIDE_SCORE = 450;
     private static final int SLIDE_SAFE = 350;
 
-    private PathChain preload, push1, push2, push3, score, park, nudge3, intake;
+    private PathChain preload, push1, push2, push3, score, park, nudge3, intake, push4;
 
 
     private final double startingX = 7.3285;
     private final double startingY = 65.83;
     private final Pose preScorePose = new Pose(startingX + 40, startingY - 17, Math.toRadians(0));
-    private final Pose scorePose = new Pose(startingX +55,startingY -8, Math.toRadians(90));
-    private final Pose intakePose = new Pose(startingX +.610, startingY - 18, Math.toRadians(0));
+    private final Pose scorePose = new Pose(startingX +56,startingY -8, Math.toRadians(90));
+    private final Pose intakePose = new Pose(startingX +.610, startingY - 17.5, Math.toRadians(0));
     private final Pose preloadControlPose = new Pose(startingX +12,startingY -20, Math.toRadians(0));
-    private final Pose preIntakePose = new Pose(startingX + 11, startingY - 18, Math.toRadians(0));
-    private final Pose push1ControlPose = new Pose(50, 37, Math.toRadians(0));
-    private final Pose push2ControlPose = new Pose(70, 30, Math.toRadians(0));
-    private final Pose push3ControlPose = new Pose(70, 29, Math.toRadians(0));
-    private final Pose dropPose = new Pose(startingX + 9, startingY - 18, Math.toRadians(0));
-    private final Pose turnPose = new Pose(startingX + 55, startingY - 17, Math.toRadians(0));
+    private final Pose preIntakePose = new Pose(startingX + 11, startingY - 17, Math.toRadians(0));
+    private final Pose push1ControlPose = new Pose(44, 36, Math.toRadians(0));
+    private final Pose push2ControlPose = new Pose(42, 35, Math.toRadians(0));
+    private final Pose push3ControlPose = new Pose(startingX + 24, startingY - 32, Math.toRadians(0));
+    private final Pose dropPose = new Pose(startingX + 9, startingY - 10, Math.toRadians(0));
+    private final Pose turnPose = new Pose(startingX + 55, startingY - 16, Math.toRadians(0));
     private final Pose parkPose = new Pose(startingX + 10, startingY - 17, Math.toRadians(0));
-    private final Pose nudge3Pose = new Pose(startingX + 58, startingY - 19, Math.toRadians(100));
-    private final Pose pre1Pose = new Pose(startingX + 35, startingY - 22, Math.toRadians(0));
-    private final Pose pre3Pose = new Pose(startingX + 58, startingY - 21, Math.toRadians(90));
+    private final Pose nudge3Pose = new Pose(startingX + 58, startingY - 17.45, Math.toRadians(100));
+    private final Pose pre1Pose = new Pose(startingX + 44, startingY - 19, Math.toRadians(0));
+    private final Pose pre3Pose = new Pose(startingX + 57, startingY - 17, Math.toRadians(90));
+    private final Pose drop3Pose = new Pose(startingX + 7, startingY - 10, Math.toRadians(0));
+    private final Pose turn1Pose = new Pose(startingX +56,startingY -9, Math.toRadians(40));
+    private final Pose pre2Pose = new Pose(startingX + 56, startingY - 20, Math.toRadians(0));
+    private final Pose mainPreScorePose = new Pose(startingX + 40, startingY - 15, Math.toRadians(0));
+    private final Pose mainTurnPose = new Pose(startingX + 55, startingY - 15, Math.toRadians(0));
 
     public void buildPaths() {
         preload = follower.pathBuilder()
@@ -70,38 +74,38 @@ public class SafeCRILeft extends OpMode {
                 .build();
 
         push1 = follower.pathBuilder()
-                .addPath(new BezierLine(pointFromPose(scorePose), pointFromPose(turnPose)))
-                .setConstantHeadingInterpolation(Math.toRadians(90))
-                .addPath(new BezierLine(pointFromPose(turnPose), pointFromPose(preScorePose)))
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(40))
-                .addPath(new BezierLine(pointFromPose(preScorePose), pointFromPose(pre1Pose)))
-                .setConstantHeadingInterpolation(Math.toRadians(40))
+                .addPath(new BezierLine(pointFromPose(scorePose), pointFromPose(turn1Pose)))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(45))
+                .addPath(new BezierLine(pointFromPose(turn1Pose), pointFromPose(pre1Pose)))
+                .setConstantHeadingInterpolation(Math.toRadians(45))
                 .addPath(new BezierCurve(pointFromPose(pre1Pose), pointFromPose(push1ControlPose), pointFromPose(dropPose)))
-                .setLinearHeadingInterpolation(Math.toRadians(40), Math.toRadians(-55))
+                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(-20))
                 .addPath(new BezierLine(pointFromPose(dropPose), pointFromPose(preIntakePose)))
-                .setLinearHeadingInterpolation(Math.toRadians(-55), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(-20), Math.toRadians(0))
                 .build();
 
         push2 = follower.pathBuilder()
-                .addPath(new BezierCurve(pointFromPose(nudge3Pose), pointFromPose(push2ControlPose), pointFromPose(dropPose)))
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(-45))
+                .addPath(new BezierCurve(pointFromPose(pre2Pose), pointFromPose(push2ControlPose), pointFromPose(dropPose)))
+                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(-20))
                 .addPath(new BezierLine(pointFromPose(dropPose), pointFromPose(preIntakePose)))
-                .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(-20), Math.toRadians(0))
                 .build();
 
         push3 = follower.pathBuilder()
                 .addPath(new BezierLine(pointFromPose(scorePose), pointFromPose(pre3Pose)))
-                .setConstantHeadingInterpolation(Math.toRadians(90))
-                .addPath(new BezierLine(pointFromPose(pre3Pose), pointFromPose(dropPose)))
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(-45))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(100))
+                .addPath(new BezierLine(pointFromPose(pre3Pose), pointFromPose(pre2Pose)))
+                .setLinearHeadingInterpolation(Math.toRadians(100), Math.toRadians(45))
+                .addPath(new BezierCurve(pointFromPose(pre2Pose), pointFromPose(push2ControlPose), pointFromPose(dropPose)))
+                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(-20))
                 .addPath(new BezierLine(pointFromPose(dropPose), pointFromPose(preIntakePose)))
-                .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(-20), Math.toRadians(0))
                 .build();
 
         score = follower.pathBuilder()
-                .addPath(new BezierLine(pointFromPose(intakePose), pointFromPose(preScorePose)))
+                .addPath(new BezierLine(pointFromPose(intakePose), pointFromPose(mainPreScorePose)))
                 .setConstantHeadingInterpolation(Math.toRadians(0))
-                .addPath(new BezierLine(pointFromPose(preScorePose), pointFromPose(turnPose)))
+                .addPath(new BezierLine(pointFromPose(mainPreScorePose), pointFromPose(mainTurnPose)))
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
                 .addPath(new BezierLine(pointFromPose(turnPose), pointFromPose(scorePose)))
                 .setConstantHeadingInterpolation(Math.toRadians(90))
@@ -117,10 +121,19 @@ public class SafeCRILeft extends OpMode {
         nudge3 = follower.pathBuilder()
                 .addPath(new BezierLine(pointFromPose(scorePose), pointFromPose(nudge3Pose)))
                 .setConstantHeadingInterpolation(Math.toRadians(100))
+                .addPath(new BezierLine(pointFromPose(nudge3Pose), pointFromPose(pre2Pose)))
+                .setLinearHeadingInterpolation(Math.toRadians(100), Math.toRadians(45))
                 .build();
 
         intake = follower.pathBuilder()
                 .addPath(new BezierLine(pointFromPose(preIntakePose), pointFromPose(intakePose)))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .build();
+
+        push4 = follower.pathBuilder()
+                .addPath(new BezierLine(pointFromPose(scorePose), pointFromPose(turnPose)))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(0))
+                .addPath(new BezierLine(pointFromPose(turnPose), pointFromPose(preIntakePose)))
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
@@ -140,6 +153,7 @@ public class SafeCRILeft extends OpMode {
                 break;
             case 2:
                 if (!follower.isBusy()) {
+                    follower.setMaxPower(0.8);
                     if (specCounter == 1) {
                         follower.followPath(push1, true);
                         setPathState();
@@ -148,15 +162,20 @@ public class SafeCRILeft extends OpMode {
                         follower.followPath(push2, true);
                         setPathState();
                     }
-                    else if (specCounter >= 3) {
-                        follower.setMaxPower(0.5);
+                    else if (specCounter == 3) {
                         follower.followPath(push3, true);
+                        setPathState();
+                    }
+                    else if (specCounter == 4) {
+                        follower.setMaxPower(1);
+                        follower.followPath(push4, true);
                         setPathState();
                     }
                 }
                 break;
             case 3:
                 if (!follower.isBusy()) {
+                    follower.setMaxPower(0.4);
                     follower.followPath(intake);
                     setPathState();
                 }
@@ -169,6 +188,7 @@ public class SafeCRILeft extends OpMode {
                 break;
             case 6:
                 if (!follower.isBusy()) {
+                    follower.setMaxPower(0.8);
                     follower.followPath(score, true);
                     setPathState();
                 }
@@ -179,6 +199,7 @@ public class SafeCRILeft extends OpMode {
             case 8:
                 if (!follower.isBusy()) {
                     if (specCounter == 5) {
+                        follower.setMaxPower(1);
                         follower.followPath(park, true);
                         setPathState(-1);
                     }
@@ -192,6 +213,7 @@ public class SafeCRILeft extends OpMode {
                 break;
             case 9:
                 if (!follower.isBusy()) {
+                    follower.setMaxPower(0.4);
                     follower.followPath(nudge3, true);
                     setPathState(2);
                 }
@@ -288,36 +310,30 @@ public class SafeCRILeft extends OpMode {
 
         telemetry.update();
 
-        if (pathState != 3) {
-            if (specCounter == 5) {
-                follower.setMaxPower(1);
-                power = 1;
-            }
-            else if (specCounter == 0) {
-                follower.setMaxPower(0.8);
-                power = 0.8;
-            }
-//        else if (follower.getPose().getX() < 40 && follower.getPose().getY() < 60 && follower.getPose().getY() > 28 && follower.getVelocity().getXComponent() < 0 && specCounter != 1) {
+//        if (specCounter == 5) {
+//            follower.setMaxPower(1);
+//            power = 1;
+//        }
+//        else if (specCounter == 0) {
+//            follower.setMaxPower(0.8);
+//            power = 0.8;
+//        }
+//        else if (follower.getPose().getX() < 12 && follower.getPose().getY() < startingY - 16) {
 //                follower.setMaxPower(0.35);
 //                power = 0.35;
 //            }
-//        else if (follower.getPose().getX() < 24 && follower.getPose().getY() < 48 && follower.getPose().getY() > 24 && follower.getPose().getY() > 10 && follower.getVelocity().getXComponent() < 0) {
-//            follower.setMaxPower(0.35);
-//            power = 0.35;
-//            }
-            else if (specCounter == 1) {
-                follower.setMaxPower(0.8);
-                power = 0.8;
-            }
-            else {
-                follower.setMaxPower(0.8);
-                power = 0.8;
-            }
-        }
-        else {
-            follower.setMaxPower(0.4);
-            power = 0.4;
-        }
+////        else if (follower.getPose().getX() < 24 && follower.getPose().getY() < 48 && follower.getPose().getY() > 24 && follower.getPose().getY() > 10 && follower.getVelocity().getXComponent() < 0) {
+////            follower.setMaxPower(0.35);
+////            power = 0.35;
+////            }
+//        else if (specCounter == 1) {
+//            follower.setMaxPower(0.8);
+//            power = 0.8;
+//        }
+//        else {
+//            follower.setMaxPower(0.8);
+//            power = 0.8;
+//        }
 
 //        follower.setMaxPower(0.5);
 
@@ -356,6 +372,8 @@ public class SafeCRILeft extends OpMode {
         endEffector.setAutoIdle();
         deposit.setPivotTarget(121);
         deposit.setSlideTarget(0);
+
+        follower.setMaxPower(0.8);
 
         // Build our newly incorporated multi-step path:
         buildPaths();
