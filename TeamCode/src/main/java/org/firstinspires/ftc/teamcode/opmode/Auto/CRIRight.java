@@ -40,7 +40,6 @@ public class CRIRight extends OpMode {
 
     private PathChain preload, push1, push2, push3, score, park, nudge3, intake, push4;
 
-
     private final double startingX = 7.3285;
     private final double startingY = 65.83;
     private final Pose preScorePose = new Pose(startingX + 40, startingY + 17, Math.toRadians(0));
