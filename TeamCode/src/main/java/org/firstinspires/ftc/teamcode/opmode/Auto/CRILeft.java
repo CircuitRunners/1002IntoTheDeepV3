@@ -49,20 +49,20 @@ public class CRILeft extends OpMode {
     private final Pose preloadControlPose = new Pose(startingX +12,startingY -20, Math.toRadians(0));
     private final Pose preIntakePose = new Pose(startingX + 11, startingY - 17, Math.toRadians(0));
     private final Pose push1ControlPose = new Pose(44, 36, Math.toRadians(0));
-    private final Pose push2ControlPose = new Pose(42, 35, Math.toRadians(0));
+    private final Pose push2ControlPose = new Pose(42, 33, Math.toRadians(0));
     private final Pose push3ControlPose = new Pose(startingX + 24, startingY - 32, Math.toRadians(0));
     private final Pose dropPose = new Pose(startingX + 9, startingY - 10, Math.toRadians(0));
     private final Pose turnPose = new Pose(startingX + 55, startingY - 16, Math.toRadians(0));
     private final Pose parkPose = new Pose(startingX + 10, startingY - 17, Math.toRadians(0));
-    private final Pose nudge3Pose = new Pose(startingX + 55.5, startingY - 20, Math.toRadians(100));
-    private final Pose pre1Pose = new Pose(startingX + 44, startingY - 20, Math.toRadians(0));
-    private final Pose pre3Pose = new Pose(startingX + 54, startingY - 17.8, Math.toRadians(90));
+    private final Pose nudge3Pose = new Pose(startingX + 58, startingY - 18, Math.toRadians(100));
+    private final Pose pre1Pose = new Pose(startingX + 44.7, startingY - 21, Math.toRadians(0));
+    private final Pose pre3Pose = new Pose(startingX + 55, startingY - 18.5, Math.toRadians(90));
     private final Pose drop3Pose = new Pose(startingX + 7, startingY - 10, Math.toRadians(0));
     private final Pose turn1Pose = new Pose(startingX +57,startingY -9, Math.toRadians(40));
     private final Pose pre2Pose = new Pose(startingX + 56, startingY - 21, Math.toRadians(0));
     private final Pose mainPreScorePose = new Pose(startingX + 40, startingY - 15, Math.toRadians(0));
     private final Pose mainTurnPose = new Pose(startingX + 55, startingY - 15, Math.toRadians(0));
-    private final Pose preNudge = new Pose(startingX + 55.3, startingY - 17.6, Math.toRadians(100));
+    private final Pose preNudge = new Pose(startingX + 55.3, startingY - 18.2, Math.toRadians(100));
 
     public void buildPaths() {
         preload = follower.pathBuilder()
@@ -87,7 +87,7 @@ public class CRILeft extends OpMode {
 
         push2 = follower.pathBuilder()
                 .addPath(new BezierCurve(pointFromPose(pre2Pose), pointFromPose(push2ControlPose), pointFromPose(dropPose)))
-                .setLinearHeadingInterpolation(Math.toRadians(50), Math.toRadians(-20))
+                .setLinearHeadingInterpolation(Math.toRadians(48), Math.toRadians(-20))
                 .addPath(new BezierLine(pointFromPose(dropPose), pointFromPose(preIntakePose)))
                 .setLinearHeadingInterpolation(Math.toRadians(-20), Math.toRadians(0))
                 .build();
@@ -123,7 +123,7 @@ public class CRILeft extends OpMode {
                 .addPath(new BezierLine(pointFromPose(scorePose), pointFromPose(preNudge)))
                 .setLinearHeadingInterpolation(Math.toRadians(100), Math.toRadians(92))
                 .addPath(new BezierLine(pointFromPose(preNudge), pointFromPose(nudge3Pose)))
-                .setLinearHeadingInterpolation(Math.toRadians(92), Math.toRadians(50))
+                .setLinearHeadingInterpolation(Math.toRadians(92), Math.toRadians(48))
                 .build();
 
         intake = follower.pathBuilder()
@@ -160,7 +160,6 @@ public class CRILeft extends OpMode {
                         setPathState();
                     }
                     else if (specCounter == 2) {
-                        follower.setMaxPower(0.21);
                         follower.followPath(push2, true);
                         if (pathTimer.getElapsedTimeSeconds() > 1) {
                             follower.setMaxPower(0.8);
