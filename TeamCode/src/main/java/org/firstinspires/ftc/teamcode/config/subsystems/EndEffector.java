@@ -245,7 +245,7 @@ public class EndEffector {
      *  Sets the end effector to a scoring position for the low chamber.
      */
     public void setLowChamberScore() {
-        setPositions(0.31, 0.88, 1, 0.44);
+        setPositions(0.31, 0.93, 1, 0.4);
     }
 
     /**
