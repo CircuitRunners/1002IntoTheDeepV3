@@ -155,7 +155,7 @@ public class Deposit {
 
     public int pivotPos() {
         // int pos = (int) (Math.round(pivotEncoder.getVoltage() / 3.2 * 360)) % 360 - 168;
-        int pos = (int) (Math.round(pivotEncoder.getVoltage() / 3.2 * 360) + (15) % 360);
+        int pos = (int) (Math.round(pivotEncoder.getVoltage() / 3.2 * 360) + (13) % 360);
 
         if (pos >= 360) {
             pos -= 360;
