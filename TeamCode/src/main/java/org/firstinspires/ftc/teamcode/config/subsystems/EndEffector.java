@@ -15,7 +15,8 @@ import com.qualcomm.robotcore.util.Range;
 public class EndEffector {
 
     // Configurable positions (visible on FTC Dashboard)
-    public double armPosition = 0.5;    // must be within [0.2, 0.65]
+    public double armPosition = 0.5;    // must be within [0.2, 0.65].0
+
     public double pivotPosition = 0.1;  // pivot allowed full range [0, 1]
     public double wristPosition = 0.45; // must be within [0.38, 0.7]
     public double clawPosition = 0.13;  // must be within [0.59, 0.74]
@@ -176,22 +177,22 @@ public class EndEffector {
      * Sets the end effector to an idle position.
      */
     public void setIdlePosition() {
-        setPositions(0.52, 0.66, 0.45, clawPosition);
+        setPositions(0.44, 0.66, 0.45, clawPosition); //subtract 0.08
     }
 
     public void setAutoIdle() {
-        setPositions(0.5, 0.66, 1, clawPosition);
+        setPositions(0.5-0.11, 0.66, 1, clawPosition);
     }
 
     /**
      * Sets the end effector to a safe idle position.
      */
     public void setSafeIdle() {
-        setPositions(0.52, 0.66, 0.5, clawPosition);
+        setPositions(0.52-0.11, 0.66, 0.5, clawPosition);
     }
 
     public void setBucketSafeIdle() {
-        setPositions(0.69, 0.76, 1, clawPosition);
+        setPositions(0.69-0.11, 0.76, 1, clawPosition);
     }
 
     /**
@@ -210,42 +211,42 @@ public class EndEffector {
      */
     public void setPreSubPickupPosition() {
         // was 0.67 & 0.67
-        setPositions(0.51, 0.91, wristPosition, clawPosition);
+        setPositions(0.51-0.11, 0.91, wristPosition, clawPosition);
     }
 
     /**
      * Sets the end effector to the sub pickup position.
      */
     public void setSubPickupPosition() {
-        setPositions(0.64, 0.86, wristPosition, clawPosition);
+        setPositions(0.64-0.11, 0.86, wristPosition, clawPosition);
     }
 
     /**
      * Sets the end effector to the obstacle deposit position.
      */
     public void setObsDepositPosition() {
-        setPositions(0.29, 0.54, 0, clawPosition);
+        setPositions(0.29-0.11, 0.54, 0, clawPosition);
     }
 
     /**
      * Sets the end effector to an alternate wall intake position.
      */
     public void setWallIntakePositionAlt() {
-        setPositions(0.88, 0.67, 0, clawPosition);
+        setPositions(0.88-0.11, 0.63, 0, clawPosition);
     }
 
     /**
      * Sets the end effector to a special scoring position.
      */
     public void setSpecScore() {
-        setPositions(0.41, 0.72, 1, 0.3);
+        setPositions(0.41-0.11, 0.72, 1, 0.3);
     }
 
     /**
      *  Sets the end effector to a scoring position for the low chamber.
      */
     public void setLowChamberScore() {
-        setPositions(0.31, 0.93, 1, 0.4);
+        setPositions(0.31-0.11, 0.93, 1, 0.4);
     }
 
     /**
